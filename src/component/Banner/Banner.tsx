@@ -1,5 +1,8 @@
 import type { ReactNode } from "react";
 import type { Pokemon } from "@/types/pokemon.types";
+import fireBackground from "@/assets/fire_background.png";
+import defaultBackground from "@/assets/default_background.png";
+import "./Banner.css";
 
 interface BannerProps {
   children: ReactNode;
@@ -7,37 +10,47 @@ interface BannerProps {
 }
 
 export default function Banner({ children, pokemon }: BannerProps) {
-  const ShowTypes = () => {
-    if (!pokemon) return null;
-    return pokemon.types.map((type) => <p key={type.slot}>{type.type.name}</p>);
+  const backgrounds: Record<string, string> = {
+    fire: fireBackground,
   };
+
+  const pokemonType = pokemon?.types[0]?.type.name;
+
+  const backgroundImage = backgrounds[pokemonType ?? ""] ?? defaultBackground;
+
+  const artwork = pokemon?.sprites?.other?.["official-artwork"]?.front_default;
+
+  const abilities = pokemon?.abilities ?? [];
+
+  const types = pokemon?.types ?? [];
 
   return (
     <div
-      style={{ padding: "20px", border: "2px solid black", marginBottom: 20 }}
+      className="banner"
+      style={
+        {
+          "--banner-image": `url(${backgroundImage})`,
+        } as React.CSSProperties
+      }
     >
-      {/* NAME */}
+      <div>
+        {types.map((type) => (
+          <p key={type.slot}>{type.type.name}</p>
+        ))}
+      </div>
+
       <h1>
         {pokemon?.name} #{pokemon?.id}
       </h1>
-      {/* TYPES */}
-      <ShowTypes />
-      {/* ABILITIES */}
-      {pokemon?.abilities && (
-        <div>
-          {pokemon.abilities.map((ability) => (
-            <p key={ability.slot}>{ability?.ability?.name}</p>
-          ))}
-        </div>
-      )}
-      {/* SPRITE */}
-      {pokemon?.sprites?.other?.["official-artwork"]?.front_default && (
-        <img
-          src={pokemon?.sprites?.other?.["official-artwork"]?.front_default}
-          alt={pokemon?.name}
-        />
-      )}
-      {/* EVOLUTION CHAIN */}
+
+      <div>
+        {abilities.map((ability) => (
+          <p key={ability.slot}>{ability.ability?.name}</p>
+        ))}
+      </div>
+
+      {artwork && <img src={artwork} alt={pokemon?.name} />}
+
       {children}
     </div>
   );

@@ -1,0 +1,14 @@
+.banner {
+  background-image:
+    linear-gradient(to bottom right,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.30),
+      rgba(0, 0, 0, 0.60),
+      rgba(0, 0, 0, 1)),
+    var(--banner-image);
+
+  background-repeat:
+    no-repeat,
+    repeat-x;
+  background-size: auto, auto 100%;
+}
